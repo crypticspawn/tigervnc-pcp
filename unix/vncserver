@@ -703,7 +703,7 @@ sub List
     opendir(dir, $vncUserDir);
     my @filelist = readdir(dir);
     closedir(dir);
-    print "\nTigerVNC server sessions:\n\n";
+    print "\nVNC server sessions:\n\n";
     print "X DISPLAY #\tPROCESS ID\n";
     foreach my $file (@filelist) {
 	if ($file =~ /$host:(\d+)$\.pid/) {

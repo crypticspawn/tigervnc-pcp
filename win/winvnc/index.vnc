@@ -1,5 +1,5 @@
 <!-- 
-     index.vnc - default HTML page for TigerVNC Java viewer applet, to be
+     index.vnc - default HTML page for VNC Java viewer applet, to be
      used with WinVNC. On any file ending in .vnc, the HTTP server embedded in
      WinVNC will substitute the following variables when preceded by a dollar:
      USER, DESKTOP, APPLETWIDTH, APPLETHEIGHT, WIDTH, HEIGHT, PORT,
@@ -18,5 +18,5 @@ $USER's $DESKTOP desktop
 <param name="draggable" value="true">
 </APPLET>
 <BR>
-<A href="http://www.tigervnc.org/">TigerVNC site</A>
+<A href="http://www.tigervnc.org/">VNC site</A>
 </HTML>

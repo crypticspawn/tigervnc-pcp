@@ -1,20 +1,20 @@
 [Setup]
 #ifdef WIN64
 ArchitecturesInstallIn64BitMode=x64
-AppName=TigerVNC 64-bit
-AppVerName=TigerVNC 64-bit @VERSION@ (@BUILD@)
+AppName=VNC 64-bit
+AppVerName=VNC 64-bit @VERSION@ (@BUILD@)
 #else
-AppName=TigerVNC
-AppVerName=TigerVNC v@VERSION@ (@BUILD@)
+AppName=VNC
+AppVerName=VNC v@VERSION@ (@BUILD@)
 #endif
 AppVersion=@VERSION@
-AppPublisher=TigerVNC project
+AppPublisher=VNC project
 AppPublisherURL=http://tigervnc.org
-DefaultDirName={pf}\TigerVNC
+DefaultDirName={pf}\VNC
 #ifdef WIN64
-DefaultGroupName=TigerVNC 64-bit
+DefaultGroupName=VNC 64-bit
 #else
-DefaultGroupName=TigerVNC
+DefaultGroupName=VNC
 #endif
 LicenseFile=@CMAKE_SOURCE_DIR@\LICENCE.txt
 
@@ -30,8 +30,8 @@ Source: "@CMAKE_SOURCE_DIR@\LICENCE.TXT"; DestDir: "{app}"; Flags: ignoreversion
 
 
 [Icons]
-Name: "{group}\TigerVNC Viewer"; FileName: "{app}\vncviewer.exe";
-Name: "{group}\Listening TigerVNC Viewer"; FileName: "{app}\vncviewer.exe"; Parameters: "-listen";
+Name: "{group}\VNC Viewer"; FileName: "{app}\vncviewer.exe";
+Name: "{group}\Listening VNC Viewer"; FileName: "{app}\vncviewer.exe"; Parameters: "-listen";
 
 #ifdef BUILD_WINVNC
 Name: "{group}\VNC Server (User-Mode)\Run VNC Server"; FileName: "{app}\winvnc4.exe"; Parameters: "-noconsole";
@@ -45,12 +45,12 @@ Name: "{group}\VNC Server (Service-Mode)\Stop VNC Service"; FileName: "{app}\win
 #endif
 Name: "{group}\License"; FileName: "write.exe"; Parameters: "LICENCE.TXT"; WorkingDir: "{app}"; Flags: "useapppaths"
 Name: "{group}\Read Me"; FileName: "write.exe"; Parameters: "README.txt"; WorkingDir: "{app}"; Flags: "useapppaths"
-Name: "{group}\Uninstall TigerVNC"; FileName: "{uninstallexe}"; WorkingDir: "{app}";
+Name: "{group}\Uninstall VNC"; FileName: "{uninstallexe}"; WorkingDir: "{app}";
 
 #ifdef BUILD_WINVNC
 [Tasks]
-Name: installservice; Description: "&Register new TigerVNC Server as a system service"; GroupDescription: "Server configuration:"; 
-Name: startservice; Description: "&Start or restart TigerVNC service"; GroupDescription: "Server configuration:";
+Name: installservice; Description: "&Register new VNC Server as a system service"; GroupDescription: "Server configuration:";
+Name: startservice; Description: "&Start or restart VNC service"; GroupDescription: "Server configuration:";
 
 [Run]
 Filename: "{app}\winvnc4.exe"; Parameters: "-register"; Tasks: installservice

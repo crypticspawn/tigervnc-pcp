@@ -1,6 +1,6 @@
 /* Copyright (C) 2009 TightVNC Team
  * Copyright (C) 2009, 2010 Red Hat, Inc.
- * Copyright (C) 2009, 2010 TigerVNC Team
+ * Copyright (C) 2009, 2010 VNC Team
  * Copyright 2013-2015 Pierre Ossman for Cendio AB
  *
  * This is free software; you can redistribute it and/or modify

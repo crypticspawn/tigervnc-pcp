@@ -1,4 +1,4 @@
-.TH vncviewer 1 "" "TigerVNC" "Virtual Network Computing"
+.TH vncviewer 1 "" "VNC" "Virtual Network Computing"
 .SH NAME
 vncviewer \- VNC viewer for X
 .SH SYNOPSIS
@@ -263,7 +263,7 @@ Scroll_Lock, Escape, Insert, Delete, Home, Page_Up, Page_Down). Default is F8.
 \fB\-via\fR \fIgateway\fR
 Automatically create encrypted TCP tunnel to the \fIgateway\fR machine
 before connection, connect to the \fIhost\fR through that tunnel
-(TigerVNC\-specific). By default, this option invokes SSH local port
+(VNC\-specific). By default, this option invokes SSH local port
 forwarding, assuming that SSH client binary can be accessed as
 /usr/bin/ssh. Note that when using the \fB\-via\fR option, the host
 machine name should be specified as known to the gateway machine, e.g. 
@@ -284,7 +284,7 @@ Display a dialog with any fatal error before exiting. Default is on.
 .TP
 $HOME/.vnc/default.tigervnc
 Default configuration options. This file must have a "magic" first line of
-"TigerVNC Configuration file Version 1.0" (without quotes), followed by simple
+"VNC Configuration file Version 1.0" (without quotes), followed by simple
 <setting>=<value> pairs of your choosing. The available settings are those
 shown in this man page.
 .TP
@@ -309,4 +309,4 @@ VNC was originally developed by the RealVNC team while at Olivetti
 Research Ltd / AT&T Laboratories Cambridge.  TightVNC additions were
 implemented by Constantin Kaplinsky. Many other people have since
 participated in development, testing and support. This manual is part
-of the TigerVNC software suite.
+of the VNC software suite.

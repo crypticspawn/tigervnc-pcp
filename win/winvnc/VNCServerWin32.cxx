@@ -39,7 +39,7 @@ using namespace network;
 static LogWriter vlog("VNCServerWin32");
 
 
-const TCHAR* winvnc::VNCServerWin32::RegConfigPath = _T("Software\\TigerVNC\\WinVNC4");
+const TCHAR* winvnc::VNCServerWin32::RegConfigPath = _T("Software\\VNC\\WinVNC4");
 
 
 static IntParameter http_port("HTTPPortNumber",
@@ -60,7 +60,7 @@ VNCServerWin32::VNCServerWin32()
   : command(NoCommand),
     commandEvent(CreateEvent(0, TRUE, FALSE, 0)),
     sessionEvent(isServiceProcess() ?
-      CreateEvent(0, FALSE, FALSE, "Global\\SessionEventTigerVNC") : 0),
+      CreateEvent(0, FALSE, FALSE, "Global\\SessionEventVNC") : 0),
     vncServer(CStr(ComputerName().buf), &desktop),
     thread_id(-1), runServer(false), isDesktopStarted(false),
     httpServer(&vncServer), config(&sockMgr),

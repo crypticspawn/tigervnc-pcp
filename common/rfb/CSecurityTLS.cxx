@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2004 Red Hat Inc.
  * Copyright (C) 2005 Martin Koegler
- * Copyright (C) 2010 TigerVNC Team
+ * Copyright (C) 2010 VNC Team
  * Copyright (C) 2010 m-privacy GmbH
  *    
  * This is free software; you can redistribute it and/or modify

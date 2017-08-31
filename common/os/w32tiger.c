@@ -1,4 +1,4 @@
-/* Copyright (C) 2011 TigerVNC Team.  All Rights Reserved.
+/* Copyright (C) 2011 VNC Team.  All Rights Reserved.
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

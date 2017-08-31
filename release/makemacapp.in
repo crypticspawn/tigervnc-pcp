@@ -23,7 +23,7 @@ usage()
 
 UNIVERSAL=0
 
-PACKAGE_NAME=TigerVNC
+PACKAGE_NAME=VNC
 VERSION=@VERSION@
 BUILD=@BUILD@
 SRCDIR=@CMAKE_SOURCE_DIR@
@@ -40,11 +40,11 @@ fi
 
 umask 022
 TMPDIR=`mktemp -d /tmp/$PACKAGE_NAME-build.XXXXXX`
-APPROOT="$TMPDIR/dmg/TigerVNC Viewer $VERSION.app"
+APPROOT="$TMPDIR/dmg/VNC Viewer $VERSION.app"
 mkdir -p "$APPROOT/Contents/MacOS"
 mkdir -p "$APPROOT/Contents/Resources"
 
-install -m 755 vncviewer/vncviewer "$APPROOT/Contents/MacOS/TigerVNC Viewer"
+install -m 755 vncviewer/vncviewer "$APPROOT/Contents/MacOS/VNC Viewer"
 if [ $UNIVERSAL = 1 ]; then
 	if [ ! -d $BUILDDIR32 ]; then
 		echo ERROR: 32-bit build directory $BUILDDIR32 does not exist
@@ -58,8 +58,8 @@ if [ $UNIVERSAL = 1 ]; then
 	make
 	popd
 	lipo -create -arch i386 $BUILDDIR32/vncviewer/vncviewer -arch x86_64 \
-		"$APPROOT/Contents/MacOS/TigerVNC Viewer" \
-		-output "$APPROOT/Contents/MacOS/TigerVNC Viewer"
+		"$APPROOT/Contents/MacOS/VNC Viewer" \
+		-output "$APPROOT/Contents/MacOS/VNC Viewer"
 fi
 install -m 644 $SRCDIR/release/tigervnc.icns "$APPROOT/Contents/Resources/"
 install -m 644 release/Info.plist "$APPROOT/Contents/"

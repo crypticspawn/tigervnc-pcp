@@ -1,4 +1,4 @@
-.TH vncserver 1 "" "TigerVNC" "Virtual Network Computing"
+.TH vncserver 1 "" "VNC" "Virtual Network Computing"
 .SH NAME
 vncserver \- start or stop a VNC server
 .SH SYNOPSIS
@@ -117,7 +117,7 @@ path for Xvnc to use.
 Runs Xvnc as a foreground process.  This has two effects: (1) The VNC server
 can be aborted with CTRL-C, and (2) the VNC server will exit as soon as the
 user logs out of the window manager in the VNC session.  This may be necessary
-when launching TigerVNC from within certain grid computing environments.
+when launching VNC from within certain grid computing environments.
 .
 .TP
 .B \-autokill
@@ -128,7 +128,7 @@ manager.
 .TP
 .B \-noxstartup
 Do not run the %HOME/.vnc/xstartup script after launching Xvnc.  This
-option allows you to manually start a window manager in your TigerVNC session.
+option allows you to manually start a window manager in your VNC session.
 .
 .TP
 .B \-xstartup \fIscript\fP
@@ -201,4 +201,4 @@ VNC was originally developed by the RealVNC team while at Olivetti
 Research Ltd / AT&T Laboratories Cambridge.  TightVNC additions were
 implemented by Constantin Kaplinsky. Many other people have since
 participated in development, testing and support. This manual is part
-of the TigerVNC software suite.
+of the VNC software suite.

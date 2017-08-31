@@ -1,5 +1,5 @@
 /* Copyright (C) 2005 Martin Koegler
- * Copyright (C) 2010 TigerVNC Team
+ * Copyright (C) 2010 VNC Team
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

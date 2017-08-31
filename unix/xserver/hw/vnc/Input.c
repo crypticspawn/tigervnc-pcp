@@ -91,21 +91,21 @@ void vncInitInputDevice(void)
 	for (i = 0;i < 256;i++)
 		pressedKeys[i] = NoSymbol;
 
-	ret = AllocDevicePair(serverClient, "TigerVNC",
+	ret = AllocDevicePair(serverClient, "VNC",
 	                      &vncPointerDev, &vncKeyboardDev,
 	                      vncPointerProc, vncKeyboardProc,
 			      FALSE);
 
 	if (ret != Success)
-		FatalError("Failed to initialize TigerVNC input devices\n");
+		FatalError("Failed to initialize VNC input devices\n");
 
 	if (ActivateDevice(vncPointerDev, TRUE) != Success ||
 	    ActivateDevice(vncKeyboardDev, TRUE) != Success)
-		FatalError("Failed to activate TigerVNC devices\n");
+		FatalError("Failed to activate VNC devices\n");
 
 	if (!EnableDevice(vncPointerDev, TRUE) ||
 	    !EnableDevice(vncKeyboardDev, TRUE))
-		FatalError("Failed to activate TigerVNC devices\n");
+		FatalError("Failed to activate VNC devices\n");
 
 #if XORG < 111
 	/* eventq is never free()-ed because it exists during server life. */

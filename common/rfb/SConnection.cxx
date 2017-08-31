@@ -166,8 +166,10 @@ void SConnection::processVersionMsg()
 
   // list supported security types for >=3.7 clients
 
-  if (secTypes.empty())
+  if (secTypes.empty()) {
+    vlog.error("No supported security types");
     throwConnFailedException("No supported security types");
+  }
 
   os->writeU8(secTypes.size());
   for (i=secTypes.begin(); i!=secTypes.end(); i++)
@@ -280,10 +282,12 @@ void SConnection::setEncodings(int nEncodings, const rdr::S32* encodings)
 
 void SConnection::versionReceived()
 {
+  vlog.info("version received");
 }
 
 void SConnection::authSuccess()
 {
+  vlog.info("auth success");
 }
 
 void SConnection::queryConnection(const char* userName)

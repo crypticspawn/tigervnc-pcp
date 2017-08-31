@@ -148,7 +148,7 @@ BoolParameter fullscreenSystemKeys("FullscreenSystemKeys",
 StringParameter via("via", "Gateway to tunnel via", "");
 #endif
 
-static const char* IDENTIFIER_STRING = "TigerVNC Configuration file Version 1.0";
+static const char* IDENTIFIER_STRING = "VNC Configuration file Version 1.0";
 
 static VoidParameter* parameterArray[] = {
 #ifdef HAVE_GNUTLS
@@ -407,7 +407,7 @@ static void saveToReg(const char* servername) {
   HKEY hKey;
     
   LONG res = RegCreateKeyExW(HKEY_CURRENT_USER,
-                             L"Software\\TigerVNC\\vncviewer", 0, NULL,
+                             L"Software\\VNC\\vncviewer", 0, NULL,
                              REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                              &hKey, NULL);
   if (res != ERROR_SUCCESS) {
@@ -442,7 +442,7 @@ static char* loadFromReg() {
   HKEY hKey;
 
   LONG res = RegOpenKeyExW(HKEY_CURRENT_USER,
-                           L"Software\\TigerVNC\\vncviewer", 0,
+                           L"Software\\VNC\\vncviewer", 0,
                            KEY_READ, &hKey);
   if (res != ERROR_SUCCESS) {
     if (res == ERROR_FILE_NOT_FOUND) {

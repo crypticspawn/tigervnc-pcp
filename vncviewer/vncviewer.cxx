@@ -97,10 +97,10 @@ static const char *about_text()
   // encodings, so we need to make sure we get a fresh string every
   // time.
   snprintf(buffer, sizeof(buffer),
-           _("TigerVNC Viewer %d-bit v%s\n"
+           _("VNC Viewer %d-bit v%s\n"
              "Built on: %s\n"
-             "Copyright (C) 1999-%d TigerVNC Team and many others (see README.txt)\n"
-             "See http://www.tigervnc.org for information on TigerVNC."),
+             "Copyright (C) 1999-%d VNC Team and many others (see README.txt)\n"
+             "See https://www.pcpitstop.com/vnc for information on VNC."),
            (int)sizeof(size_t)*8, PACKAGE_VERSION,
            BUILD_TIMESTAMP, 2017);
 
@@ -124,7 +124,7 @@ bool should_exit()
 
 void about_vncviewer()
 {
-  fl_message_title(_("About TigerVNC Viewer"));
+  fl_message_title(_("About VNC Viewer"));
   fl_message("%s", about_text());
 }
 
@@ -155,7 +155,7 @@ static void new_connection_cb(Fl_Widget *widget, void *data)
 
   pid = fork();
   if (pid == -1) {
-    vlog.error(_("Error starting new TigerVNC Viewer: %s"), strerror(errno));
+    vlog.error(_("Error starting new VNC Viewer: %s"), strerror(errno));
     return;
   }
 
@@ -167,7 +167,7 @@ static void new_connection_cb(Fl_Widget *widget, void *data)
 
   execvp(argv[0], (char * const *)argv);
 
-  vlog.error(_("Error starting new TigerVNC Viewer: %s"), strerror(errno));
+  vlog.error(_("Error starting new VNC Viewer: %s"), strerror(errno));
   _exit(1);
 }
 #endif
@@ -176,7 +176,7 @@ static void CleanupSignalHandler(int sig)
 {
   // CleanupSignalHandler allows C++ object cleanup to happen because it calls
   // exit() rather than the default which is to abort.
-  vlog.info(_("Termination signal %d has been received. TigerVNC Viewer will now exit."), sig);
+  vlog.info(_("Termination signal %d has been received. VNC Viewer will now exit."), sig);
   exit(1);
 }
 
@@ -268,7 +268,7 @@ static void init_fltk()
   fl_message_hotspot(false);
 
   // Avoid empty titles for popups
-  fl_message_title_default(_("TigerVNC Viewer"));
+  fl_message_title_default(_("VNC Viewer"));
 
 #ifdef WIN32
   // Most "normal" Windows apps use this font for UI elements.
@@ -420,7 +420,7 @@ createTunnel(const char *gatewayHost, const char *remoteHost,
   setenv("L", lport, 1);
   if (!cmd)
     cmd = "/usr/bin/ssh -f -L \"$L\":\"$H\":\"$R\" \"$G\" sleep 20";
-  /* Compatibility with TigerVNC's method. */
+  /* Compatibility with VNC's method. */
   cmd2 = strdup(cmd);
   while ((percent = strchr(cmd2, '%')) != NULL)
     *percent = '$';
