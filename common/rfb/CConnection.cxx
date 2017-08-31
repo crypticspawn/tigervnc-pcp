@@ -141,7 +141,7 @@ void CConnection::processVersionMsg()
   if (cp.isVersion(0,0)) { // This means we are connecting to a reflector
     vlog.info("Client supports RFB protocol version %d.%d", cp.majorVersion, cp.minorVersion);
     if (cp.isReflectorStringSet()) {
-      cp.setVersion(0,0);
+      cp.setVersion(3,8);
       cp.writeReflectorString(os);
       vlog.info("ReflectorString: %s", cp.getReflectorString());
     }
