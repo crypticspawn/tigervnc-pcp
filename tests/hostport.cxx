@@ -25,10 +25,11 @@ static void doTest(const char* hostAndPort,
 {
     char* host;
     int port;
+    char* reflectorString;
 
     printf("\"%s\": ", hostAndPort);
 
-    rfb::getHostAndPort(hostAndPort, &host, &port);
+    rfb::getHostAndPort(hostAndPort, &host, &reflectorString, &port);
 
     if (strcmp(host, expectedHost) != 0)
         printf("FAILED (\"%s\" != \"%s\")", host, expectedHost);

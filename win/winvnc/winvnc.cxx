@@ -62,7 +62,7 @@ static void programInfo() {
 
 static void programUsage() {
   printf("Command-line options:\n");
-  printf("  -connect [<host[::port]>]            - Connect an existing WinVNC server to a listening viewer.\n");
+  printf("  -connect [<host[::port][:ID:<reflectorString>]>] - Connect an existing WinVNC server to a listening viewer.\n");
   printf("  -disconnect                          - Disconnect all clients from an existing WinVNC server.\n");
   printf("  -register <options...>               - Register WinVNC server as a system service.\n");
   printf("  -unregister                          - Remove WinVNC server from the list of system services.\n");

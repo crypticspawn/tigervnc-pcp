@@ -56,6 +56,23 @@ namespace rfb {
     void setVersion(int major, int minor) {
       majorVersion = major; minorVersion = minor;
     }
+
+    bool isReflectorStringSet() {
+      if (this->reflectorString != NULL)
+        return true;
+      return false;
+    }
+
+    void setReflectorString(char * reflectorString){
+      this->reflectorString = reflectorString;
+    }
+
+    char* getReflectorString() {
+      return this->reflectorString;
+    }
+
+    void writeReflectorString(rdr::OutStream* os);
+
     bool isVersion(int major, int minor) const {
       return majorVersion == major && minorVersion == minor;
     }
@@ -107,6 +124,7 @@ namespace rfb {
 
     PixelFormat pf_;
     char* name_;
+      char* reflectorString = NULL;
     Cursor* cursor_;
     std::set<rdr::S32> encodings_;
     char verStr[13];
