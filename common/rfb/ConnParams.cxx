@@ -28,29 +28,26 @@
 using namespace rfb;
 
 ConnParams::ConnParams()
-  : majorVersion(0), minorVersion(0),
-    width(0), height(0), useCopyRect(false),
-    supportsLocalCursor(false), supportsLocalXCursor(false),
-    supportsLocalCursorWithAlpha(false),
-    supportsDesktopResize(false), supportsExtendedDesktopSize(false),
-    supportsDesktopRename(false), supportsLastRect(false),
-    supportsSetDesktopSize(false), supportsFence(false),
-    supportsContinuousUpdates(false),
-    compressLevel(2), qualityLevel(-1), fineQualityLevel(-1),
-    subsampling(subsampleUndefined), name_(0), verStrPos(0)
-{
+    : majorVersion(0), minorVersion(0),
+      width(0), height(0), useCopyRect(false),
+      supportsLocalCursor(false), supportsLocalXCursor(false),
+      supportsLocalCursorWithAlpha(false),
+      supportsDesktopResize(false), supportsExtendedDesktopSize(false),
+      supportsDesktopRename(false), supportsLastRect(false),
+      supportsSetDesktopSize(false), supportsFence(false),
+      supportsContinuousUpdates(false),
+      compressLevel(2), qualityLevel(-1), fineQualityLevel(-1),
+      subsampling(subsampleUndefined), name_(0), verStrPos(0) {
   setName("");
   cursor_ = new Cursor(0, 0, Point(), NULL);
 }
 
-ConnParams::~ConnParams()
-{
-  delete [] name_;
+ConnParams::~ConnParams() {
+  delete[] name_;
   delete cursor_;
 }
 
-bool ConnParams::readVersion(rdr::InStream* is, bool* done)
-{
+bool ConnParams::readVersion(rdr::InStream *is, bool *done) {
   if (verStrPos >= 12) return false;
   while (is->checkNoWait(1) && verStrPos < 12) {
     verStr[verStrPos++] = is->readU8();
@@ -62,51 +59,45 @@ bool ConnParams::readVersion(rdr::InStream* is, bool* done)
   }
   *done = true;
   verStr[12] = 0;
-  return (sscanf(verStr, "RFB %03d.%03d\n", &majorVersion,&minorVersion) == 2);
+  return (sscanf(verStr, "RFB %03d.%03d\n", &majorVersion, &minorVersion) == 2);
 }
 
-void ConnParams::writeVersion(rdr::OutStream* os)
-{
+void ConnParams::writeVersion(rdr::OutStream *os) {
   char str[13];
   sprintf(str, "RFB %03d.%03d\n", majorVersion, minorVersion);
   os->writeBytes(str, 12);
   os->flush();
 }
 
-void ConnParams::writeReflectorString(rdr::OutStream* os) {
-  char str[250];
-  sprintf(str, "ID:%-247s", this->reflectorString);
+void ConnParams::writeReflectorString(rdr::OutStream *os) {
+  static char str[250];
+  sprintf(str, "ID:%s", this->reflectorString);
   os->writeBytes(str, 250);
   os->flush();
 }
 
-void ConnParams::setPF(const PixelFormat& pf)
-{
+void ConnParams::setPF(const PixelFormat &pf) {
   pf_ = pf;
 
   if (pf.bpp != 8 && pf.bpp != 16 && pf.bpp != 32)
     throw Exception("setPF: not 8, 16 or 32 bpp?");
 }
 
-void ConnParams::setName(const char* name)
-{
-  delete [] name_;
+void ConnParams::setName(const char *name) {
+  delete[] name_;
   name_ = strDup(name);
 }
 
-void ConnParams::setCursor(const Cursor& other)
-{
+void ConnParams::setCursor(const Cursor &other) {
   delete cursor_;
   cursor_ = new Cursor(other);
 }
 
-bool ConnParams::supportsEncoding(rdr::S32 encoding) const
-{
+bool ConnParams::supportsEncoding(rdr::S32 encoding) const {
   return encodings_.count(encoding) != 0;
 }
 
-void ConnParams::setEncodings(int nEncodings, const rdr::S32* encodings)
-{
+void ConnParams::setEncodings(int nEncodings, const rdr::S32 *encodings) {
   useCopyRect = false;
   supportsLocalCursor = false;
   supportsLocalCursorWithAlpha = false;
@@ -122,56 +113,56 @@ void ConnParams::setEncodings(int nEncodings, const rdr::S32* encodings)
   encodings_.clear();
   encodings_.insert(encodingRaw);
 
-  for (int i = nEncodings-1; i >= 0; i--) {
+  for (int i = nEncodings - 1; i >= 0; i--) {
     switch (encodings[i]) {
-    case encodingCopyRect:
-      useCopyRect = true;
-      break;
-    case pseudoEncodingCursor:
-      supportsLocalCursor = true;
-      break;
-    case pseudoEncodingXCursor:
-      supportsLocalXCursor = true;
-      break;
-    case pseudoEncodingCursorWithAlpha:
-      supportsLocalCursorWithAlpha = true;
-      break;
-    case pseudoEncodingDesktopSize:
-      supportsDesktopResize = true;
-      break;
-    case pseudoEncodingExtendedDesktopSize:
-      supportsExtendedDesktopSize = true;
-      break;
-    case pseudoEncodingDesktopName:
-      supportsDesktopRename = true;
-      break;
-    case pseudoEncodingLastRect:
-      supportsLastRect = true;
-      break;
-    case pseudoEncodingFence:
-      supportsFence = true;
-      break;
-    case pseudoEncodingContinuousUpdates:
-      supportsContinuousUpdates = true;
-      break;
-    case pseudoEncodingSubsamp1X:
-      subsampling = subsampleNone;
-      break;
-    case pseudoEncodingSubsampGray:
-      subsampling = subsampleGray;
-      break;
-    case pseudoEncodingSubsamp2X:
-      subsampling = subsample2X;
-      break;
-    case pseudoEncodingSubsamp4X:
-      subsampling = subsample4X;
-      break;
-    case pseudoEncodingSubsamp8X:
-      subsampling = subsample8X;
-      break;
-    case pseudoEncodingSubsamp16X:
-      subsampling = subsample16X;
-      break;
+      case encodingCopyRect:
+        useCopyRect = true;
+        break;
+      case pseudoEncodingCursor:
+        supportsLocalCursor = true;
+        break;
+      case pseudoEncodingXCursor:
+        supportsLocalXCursor = true;
+        break;
+      case pseudoEncodingCursorWithAlpha:
+        supportsLocalCursorWithAlpha = true;
+        break;
+      case pseudoEncodingDesktopSize:
+        supportsDesktopResize = true;
+        break;
+      case pseudoEncodingExtendedDesktopSize:
+        supportsExtendedDesktopSize = true;
+        break;
+      case pseudoEncodingDesktopName:
+        supportsDesktopRename = true;
+        break;
+      case pseudoEncodingLastRect:
+        supportsLastRect = true;
+        break;
+      case pseudoEncodingFence:
+        supportsFence = true;
+        break;
+      case pseudoEncodingContinuousUpdates:
+        supportsContinuousUpdates = true;
+        break;
+      case pseudoEncodingSubsamp1X:
+        subsampling = subsampleNone;
+        break;
+      case pseudoEncodingSubsampGray:
+        subsampling = subsampleGray;
+        break;
+      case pseudoEncodingSubsamp2X:
+        subsampling = subsample2X;
+        break;
+      case pseudoEncodingSubsamp4X:
+        subsampling = subsample4X;
+        break;
+      case pseudoEncodingSubsamp8X:
+        subsampling = subsample8X;
+        break;
+      case pseudoEncodingSubsamp16X:
+        subsampling = subsample16X;
+        break;
     }
 
     if (encodings[i] >= pseudoEncodingCompressLevel0 &&

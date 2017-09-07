@@ -319,8 +319,8 @@ int vncConnectClient(const char *addr)
   try {
     network::Socket* sock = new network::TcpSocket(host, port);
     if (*reflectorString != NULL) {
-      char str[250];
-      sprintf(str, "ID:%-247s", *reflectorString);
+      static char str[250];
+      sprintf(str, "ID:%s", *reflectorString);
       sock->outStream().writeBytes(str, 250);
     }
     delete [] host;

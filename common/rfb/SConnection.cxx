@@ -193,6 +193,8 @@ void SConnection::processSecurityType(int secType)
   std::list<rdr::U8> secTypes;
   std::list<rdr::U8>::iterator i;
 
+  vlog.info("SecurityTypeID: %d", secType);
+
   secTypes = security.GetEnabledSecTypes();
   for (i=secTypes.begin(); i!=secTypes.end(); i++)
     if (*i == secType) break;

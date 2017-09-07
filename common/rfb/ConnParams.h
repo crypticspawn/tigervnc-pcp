@@ -124,7 +124,7 @@ namespace rfb {
 
     PixelFormat pf_;
     char* name_;
-      char* reflectorString = NULL;
+    char* reflectorString = NULL;
     Cursor* cursor_;
     std::set<rdr::S32> encodings_;
     char verStr[13];
