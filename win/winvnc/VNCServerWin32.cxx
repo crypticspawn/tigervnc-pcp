@@ -237,18 +237,10 @@ bool VNCServerWin32::addNewClient(const char* client) {
   TcpSocket* sock = 0;
   try {
     CharArray hostname;
-    CharArray reflectorString;
     int port;
-    getHostAndPort(client, &hostname.buf, &reflectorString.buf, &port, 5500);
-
-    vlog.info("Reflector=%s", reflectorString.buf);
+    getHostAndPort(client, &hostname.buf, &port, 5500);
     vlog.error("port=%d", port);
     sock = new TcpSocket(hostname.buf, port);
-    if (reflectorString.buf != NULL) {
-      char str[250];
-      sprintf(str, "ID:%-247s", reflectorString.buf);
-      sock->outStream().writeBytes(str, 250);
-    }
     if (queueCommand(AddClient, sock, 0))
       return true;
     delete sock;

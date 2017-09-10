@@ -73,13 +73,6 @@ void ConnParams::writeVersion(rdr::OutStream* os)
   os->flush();
 }
 
-void ConnParams::writeReflectorString(rdr::OutStream* os) {
-  char str[250];
-  sprintf(str, "ID:%-247s", this->reflectorString);
-  os->writeBytes(str, 250);
-  os->flush();
-}
-
 void ConnParams::setPF(const PixelFormat& pf)
 {
   pf_ = pf;

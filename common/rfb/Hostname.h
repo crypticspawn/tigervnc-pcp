@@ -23,85 +23,76 @@
 #include <stdlib.h>
 #include <rdr/Exception.h>
 #include <rfb/util.h>
-#include <vector>
-#include <string>
-#include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/split.hpp>
-#include <iostream>
 
 namespace rfb {
 
-  char *strsep(char **stringp, const char *delim){
-    char *s;
-    const char *spanp;
-    int c, sc;
-    char *tok;
-    if ((s = *stringp) == NULL)
-      return (NULL);
-    for (tok = s;;) {
-      c = *s++;
-      spanp = delim;
-      do {
-        if ((sc = *spanp++) == c) {
-          if (c == 0)
-            s = NULL;
-          else
-            s[-1] = 0;
-          *stringp = s;
-          return (tok);
-        }
-      } while (sc != 0);
-    }
-  }
+  static void getHostAndPort(const char* hi, char** host, int* port, int basePort=5900) {
+    const char* hostStart;
+    const char* hostEnd;
+    const char* portStart;
 
-  static void getHostAndPort(const char* hi, char** host, char** reflectorString, int* port, int basePort=5900) {
-    char *section = NULL;
-    int index = 0;
-    char *hostString = strdup(hi);
-    //reflectorString = NULL;
-    while ((section = rfb::strsep(&hostString, ":")) != NULL) {
-      if (index == 0) {
-        *host = section;
-      } else if (index == 2) {
-        *port = atoi(section);
-        if (*port == 0) {
-          *port += basePort;
-        }
-      } else if (index == 3 && strcmp(section, "ID") != 0) {
-        break;
-      } else if (index == 4 ) {
-        *reflectorString = section;
-      }
-      index++;
-    }
-    /*
-    // hostname::port:ID:reflectorString
-    std::vector<std::string> sections;
-    std::string connectionString(hi);
-    boost::algorithm::split(sections, connectionString, boost::is_any_of(":"));
+    if (hi == NULL)
+      throw rdr::Exception("NULL host specified");
 
+    assert(host);
+    assert(port);
 
+    if (hi[0] == '[') {
+      hostStart = &hi[1];
+      hostEnd = strchr(hostStart, ']');
+      if (hostEnd == NULL)
+        throw rdr::Exception("unmatched [ in host");
 
-    // Setting defaults
-    *host = (char *)"localhost";  // I like 127.0.0.1 but old code had localhost, so making sure I stay consistent.
-    *port = 0;
+      portStart = hostEnd + 1;
+      if (*portStart == '\0')
+        portStart = NULL;
+    } else {
+      hostStart = &hi[0];
+      hostEnd = strrchr(hostStart, ':');
 
-    // Override defaults
-    for (unsigned i = 0; i < sections.size(); i++){
-      if (i == 0) {
-        *host = (char *)sections[i].c_str();
-      } else if (i == 2) {
-        *port = atoi((char *)sections[i].c_str());
-        if (*port == 0) {
-          *port += basePort;
-        }
-      } else if (i == 3 && sections[i].compare("ID") == 0) {
-        if (i+1 < sections.size()) {
-          *reflectorString = (char *)sections[i+1].c_str();
-          i++;
+      if (hostEnd == NULL) {
+        hostEnd = hostStart + strlen(hostStart);
+        portStart = NULL;
+      } else {
+        if ((hostEnd > hostStart) && (hostEnd[-1] == ':'))
+          hostEnd--;
+        portStart = strchr(hostStart, ':');
+        if (portStart != hostEnd) {
+          // We found more : in the host. This is probably an IPv6 address
+          hostEnd = hostStart + strlen(hostStart);
+          portStart = NULL;
         }
       }
-    } */
+    }
+
+    if (hostStart == hostEnd)
+      *host = strDup("localhost");
+    else {
+      size_t len;
+      len = hostEnd - hostStart + 1;
+      *host = new char[len];
+      strncpy(*host, hostStart, len-1);
+      (*host)[len-1] = '\0';
+    }
+
+    if (portStart == NULL)
+      *port = basePort;
+    else {
+      char* end;
+
+      if (portStart[0] != ':')
+        throw rdr::Exception("invalid port specified");
+
+      if (portStart[1] != ':')
+        *port = strtol(portStart + 1, &end, 10);
+      else
+        *port = strtol(portStart + 2, &end, 10);
+      if (*end != '\0')
+        throw rdr::Exception("invalid port specified");
+
+      if ((portStart[1] != ':') && (*port < 100))
+        *port += basePort;
+    }
   }
 
 };

@@ -312,17 +312,11 @@ int vncConnectClient(const char *addr)
 
   char *host;
   int port;
-  char *reflectorString;
 
-  getHostAndPort(addr, &host, &reflectorString, &port, 5500);
+  getHostAndPort(addr, &host, &port, 5500);
 
   try {
     network::Socket* sock = new network::TcpSocket(host, port);
-    if (*reflectorString != NULL) {
-      char str[250];
-      sprintf(str, "ID:%-247s", *reflectorString);
-      sock->outStream().writeBytes(str, 250);
-    }
     delete [] host;
     desktop[0]->addClient(sock, true);
   } catch (rdr::Exception& e) {

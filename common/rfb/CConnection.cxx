@@ -138,14 +138,8 @@ void CConnection::processVersionMsg()
   vlog.info("Server supports RFB protocol version %d.%d",
             cp.majorVersion, cp.minorVersion);
 
-  if (cp.isVersion(0,0)) { // This means we are connecting to a reflector
-    vlog.info("Client supports RFB protocol version %d.%d", cp.majorVersion, cp.minorVersion);
-    if (cp.isReflectorStringSet()) {
-      cp.setVersion(3,8);
-      cp.writeReflectorString(os);
-      vlog.info("ReflectorString: %s", cp.getReflectorString());
-    }
-  } else if (cp.beforeVersion(3,3)) { // The only official RFB protocol versions are currently 3.3, 3.7 and 3.8
+  // The only official RFB protocol versions are currently 3.3, 3.7 and 3.8
+  if (cp.beforeVersion(3,3)) {
     vlog.error("Server gave unsupported RFB protocol version %d.%d",
                cp.majorVersion, cp.minorVersion);
     state_ = RFBSTATE_INVALID;
@@ -163,6 +157,7 @@ void CConnection::processVersionMsg()
   vlog.info("Using RFB protocol version %d.%d",
             cp.majorVersion, cp.minorVersion);
 }
+
 
 void CConnection::processSecurityTypesMsg()
 {

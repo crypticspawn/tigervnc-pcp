@@ -104,9 +104,7 @@ CConn::CConn(const char* vncServerName, network::Socket* socket=NULL)
 
   if(sock == NULL) {
     try {
-      char *reflectorString;
-      getHostAndPort(vncServerName, &serverHost, &reflectorString, &serverPort);
-      cp.setReflectorString(reflectorString);
+      getHostAndPort(vncServerName, &serverHost, &serverPort);
 
       sock = new network::TcpSocket(serverHost, serverPort);
       vlog.info(_("connected to host %s port %d"), serverHost, serverPort);
