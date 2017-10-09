@@ -20,6 +20,7 @@
 
 #include <winvnc/VNCServerWin32.h>
 #include <winvnc/resource.h>
+#include <winvnc/NamePipeThread.h>
 #include <winvnc/STrayIcon.h>
 #include <rfb_win32/ComputerName.h>
 #include <rfb_win32/CurrentUser.h>
@@ -49,7 +50,7 @@ static BoolParameter localHost("LocalHost",
 static BoolParameter queryOnlyIfLoggedOn("QueryOnlyIfLoggedOn",
   "Only prompt for a local user to accept incoming connections if there is a user logged on", false);
 static BoolParameter showTrayIcon("ShowTrayIcon",
-  "Show the configuration applet in the system tray icon", true);
+  "Show the configuration applet in the system tray icon", false);
 
 
 VNCServerWin32::VNCServerWin32()
@@ -154,6 +155,10 @@ int VNCServerWin32::run() {
     runServer = true;
   }
 
+  // - Create Message Thread
+  vlog.debug("Starting NamePipeThread");
+  namePipe = new NamePipeThread(*this);
+
   // - Create the tray icon (if possible)
   if (showTrayIcon)
 	  trayIcon = new STrayIconThread(*this, IDI_ICON, IDI_CONNECTED,
@@ -227,7 +232,7 @@ bool VNCServerWin32::addNewClient(const char* client) {
     sock = new TcpSocket(hostname.buf, port);
     if (reflector.buf != NULL) {
       char str[250];
-      sprintf(str, "ID:%-247s", reflector.buf);
+      sprintf(str, "ID:%-245s\n", reflector.buf);
       sock->outStream().writeBytes(str, 250);
       sock->outStream().flush();
     }

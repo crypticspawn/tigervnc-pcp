@@ -15,7 +15,7 @@ add_executable(winvnc4 WIN32
   VNCServerService.cxx
   VNCServerWin32.cxx
   winvnc.cxx
-  ${CMAKE_CURRENT_BINARY_DIR}/winvnc.rc)
+  ${CMAKE_CURRENT_BINARY_DIR}/winvnc.rc NamePipeThread.cxx NamePipeThread.h)
 
 target_link_libraries(winvnc4 rfb rfb_win32 Xregion network rdr ws2_32.lib)
 

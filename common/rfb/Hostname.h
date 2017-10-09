@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <rdr/Exception.h>
 #include <rfb/util.h>
+#include <stdio.h>
 
 namespace rfb {
 
@@ -30,21 +31,32 @@ namespace rfb {
     CharArray hostBuf;
     CharArray reflectorBuf;
 
-    if (hi == NULL)
+    // Since we are using connection string that might start with vnclaunch:, lets check and remove if exists
+    char *connectionString = (char *)hi;
+    if (strlen(connectionString) > 9 && strncmp(connectionString, "vnclaunch:", 9) == 0) {
+      connectionString = &connectionString[10];
+    }
+
+    if (connectionString == NULL)
       throw rdr::Exception("NULL host specified");
-    if (hi[0] == '[') {
-      if (!strSplit(&hi[1], ']', &hostBuf.buf, &portBuf.buf))
+    if (connectionString[0] == '[') {
+      if (!strSplit(&connectionString[1], ']', &hostBuf.buf, &portBuf.buf))
         throw rdr::Exception("unmatched [ in host");
     } else {
-      portBuf.buf = strDup(hi);
+      portBuf.buf = strDup(connectionString);
     }
     if (strSplit(portBuf.buf, ':', hostBuf.buf ? 0 : &hostBuf.buf, &portBuf.buf)) {
       if (portBuf.buf[0] == ':') {
         if (strContains(&portBuf.buf[1], ':') && strSplit(&portBuf.buf[1], ':', &portBuf.buf, &reflectorBuf.buf)) {
-          *port = atoi(portBuf.buf);
-          if (reflectorBuf.buf[0] == ':' && strlen(reflectorBuf.buf) > 4 && strncmp(reflectorBuf.buf, ":ID:", 3) == 0
-              && strSplit(&reflectorBuf.buf[3], ':', 0, &reflectorBuf.buf)) {
+          if (strcmp(portBuf.buf, "ID") == 0) {
+            *port = basePort;
             *reflector = reflectorBuf.takeBuf();
+          } else {
+            *port = atoi(portBuf.buf);
+            if (reflectorBuf.buf[0] == ':' && strlen(reflectorBuf.buf) > 4 && strncmp(reflectorBuf.buf, ":ID:", 3) == 0
+                && strSplit(&reflectorBuf.buf[3], ':', 0, &reflectorBuf.buf)) {
+              *reflector = reflectorBuf.takeBuf();
+            }
           }
         } else {
           *port = atoi(&portBuf.buf[1]);

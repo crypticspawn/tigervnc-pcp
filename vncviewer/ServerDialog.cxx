@@ -134,8 +134,8 @@ void ServerDialog::handleOptions(Fl_Widget *widget, void *data)
 void ServerDialog::handleLoad(Fl_Widget *widget, void *data)
 {
   ServerDialog *dialog = (ServerDialog*)data;
-  Fl_File_Chooser* file_chooser = new Fl_File_Chooser("", "TigerVNC configuration (*.tigervnc)", 
-						      0, "Select a TigerVNC configuration file");
+  Fl_File_Chooser* file_chooser = new Fl_File_Chooser("", "VNC configuration (*.vnc)",
+						      0, "Select a VNC configuration file");
   file_chooser->preview(0);
   file_chooser->previewButton->hide();
   file_chooser->show();

@@ -97,12 +97,11 @@ static const char *about_text()
   // encodings, so we need to make sure we get a fresh string every
   // time.
   snprintf(buffer, sizeof(buffer),
-           _("TigerVNC Viewer %d-bit v%s\n"
+           _("VNC Viewer %d-bit v%s\n"
              "Built on: %s\n"
-             "Copyright (C) 1999-%d TigerVNC Team and many others (see README.txt)\n"
-             "See http://www.tigervnc.org for information on TigerVNC."),
+             "Copyright (C) 2016-%d VNC Team and many others (see README.txt)\n"),
            (int)sizeof(size_t)*8, PACKAGE_VERSION,
-           BUILD_TIMESTAMP, 2015);
+           BUILD_TIMESTAMP, 2017);
 
   return buffer;
 }
@@ -124,7 +123,7 @@ bool should_exit()
 
 void about_vncviewer()
 {
-  fl_message_title(_("About TigerVNC Viewer"));
+  fl_message_title(_("About VNC Viewer"));
   fl_message("%s", about_text());
 }
 
@@ -317,7 +316,7 @@ static void mkvnchomedir()
   }
 }
 
-static void usage(const char *programName)
+static void usage(const char *programName, int argc, char** argv)
 {
 #ifdef WIN32
   // If we don't have a console then we need to create one for output
@@ -333,6 +332,10 @@ static void usage(const char *programName)
   }
 #endif
 
+  for (int x = 0; x < argc; x++) {
+    fprintf(stderr, "Parameter: %s\n", argv[x]);
+  }
+  fprintf(stderr, "\n\n");
   fprintf(stderr,
           "\nusage: %s [parameters] [host:displayNum] [parameters]\n"
           "       %s [parameters] -listen [port] [parameters]\n",
@@ -490,13 +493,24 @@ int main(int argc, char** argv)
         continue;
 
       if (argv[i][0] == '-') {
-        if (i+1 < argc) {
+        if (strchr(argv[i], '=')) {
+          // parameter pair is separated by an equal not a space
+          char* field = strtok(&argv[i][1], "=");
+          if (field) {
+            char *value = strtok(NULL, "=");
+            if (value && strcmp(value, "auto") == 0 && strcmp(field, "scale") == 0) {
+              // Lets ignore this option
+              continue;
+            }
+          }
+        } else if (i+1 < argc) {
           if (Configuration::setParam(&argv[i][1], argv[i+1])) {
             i++;
             continue;
           }
         }
-        usage(argv[0]);
+
+        usage(argv[0], argc, argv);
       }
 
       strncpy(vncServerName, argv[i], VNCSERVERNAMELEN);

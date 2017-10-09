@@ -521,22 +521,23 @@ bool rfb::win32::startService(const TCHAR* name) {
   if (osVersion.isPlatformNT) {
     // - Open the SCM
     ServiceHandle scm = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
-    if (!scm)
+    if (!scm) {
       throw rdr::SystemException("unable to open Service Control Manager", GetLastError());
-
+    }
     // - Locate the service
     ServiceHandle service = OpenService(scm, name, SERVICE_START);
-    if (!service)
+    if (!service) {
       throw rdr::SystemException("unable to open the service", GetLastError());
-
+    }
     // - Start the service
-    if (!StartService(service, 0, NULL))
+    if (!StartService(service, 0, NULL)) {
       throw rdr::SystemException("unable to start the service", GetLastError());
+    }
   } else {
     // - Check there is no service window
-    if (findServiceWindow(name))
+    if (findServiceWindow(name)) {
       throw rdr::Exception("the service is already running");
-
+    }
     // - Find the RunServices registry key
 		RegKey services;
 		services.openKey(HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunServices"));

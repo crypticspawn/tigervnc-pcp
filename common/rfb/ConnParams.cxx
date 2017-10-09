@@ -74,7 +74,7 @@ void ConnParams::writeVersion(rdr::OutStream* os)
 // in the old version.
 void ConnParams::writeReflectorString(rdr::OutStream* os) {
   char str[250];
-  sprintf(str, "ID:%-246s\n", this->reflectorString); // We are padding with spaces
+  sprintf(str, "ID:%-245s\n", this->reflectorString); // We are padding with spaces
   os->writeBytes(str, 250);
   os->flush();
 }

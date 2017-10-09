@@ -76,18 +76,18 @@ BEGIN
         BLOCK "080904b0"
         BEGIN
             VALUE "Comments", "\0"
-            VALUE "CompanyName", "TigerVNC Project\0"
+            VALUE "CompanyName", "VNC Project\0"
             #ifdef WIN64
-            VALUE "FileDescription", "TigerVNC Server for Win64\0"
-            VALUE "ProductName", "TigerVNC Server for Win64\0"
+            VALUE "FileDescription", "VNC Server for Win64\0"
+            VALUE "ProductName", "VNC Server for Win64\0"
             #else
-            VALUE "FileDescription", "TigerVNC Server for Win32\0"
-            VALUE "ProductName", "TigerVNC Server for Win32\0"
+            VALUE "FileDescription", "VNC Server for Win32\0"
+            VALUE "ProductName", "VNC Server for Win32\0"
             #endif
             VALUE "FileVersion", __RCVERSIONSTR
             VALUE "InternalName", "winvnc\0"
-            VALUE "LegalCopyright", "Copyright (C) 1999-2013 TigerVNC Team and many others (see README.txt)\0"
-            VALUE "LegalTrademarks", "TigerVNC\0"
+            VALUE "LegalCopyright", "Copyright (C) 2016-2017 VNC Team and many others (see README.txt)\0"
+            VALUE "LegalTrademarks", "VNC\0"
             VALUE "OriginalFilename", "winvnc4.exe\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductVersion", __VERSIONSTR
@@ -145,7 +145,7 @@ END
 IDD_ABOUT DIALOG DISCARDABLE  0, 0, 300, 92
 STYLE DS_MODALFRAME | DS_SETFOREGROUND | DS_CENTER | WS_POPUP | WS_CAPTION | 
     WS_SYSMENU
-CAPTION "About TigerVNC Server for Windows"
+CAPTION "VNC Server for Windows"
 FONT 8, "MS Sans Serif"
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,245,70,47,15
@@ -154,8 +154,6 @@ BEGIN
     LTEXT           ">version<",IDC_VERSION,170,10,72,15
     LTEXT           ">buildtime<",IDC_BUILDTIME,45,25,202,15
     LTEXT           ">copyright<",IDC_COPYRIGHT,45,40,256,15
-    LTEXT           "See http://www.tigervnc.org for more information on VNC.",
-                    IDC_STATIC,45,55,202,15
 END
 
 IDD_QUERY_CONNECT DIALOG DISCARDABLE  0, 0, 164, 93

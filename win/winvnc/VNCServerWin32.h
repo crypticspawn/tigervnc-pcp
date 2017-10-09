@@ -33,6 +33,7 @@
 namespace winvnc {
 
   class STrayIconThread;
+  class NamePipeThread;
 
   class VNCServerWin32 : rfb::VNCServerST::QueryConnectionHandler,
                          rfb::win32::SocketManager::AddressChangeNotifier,
@@ -118,6 +119,7 @@ namespace winvnc {
     ManagedListener rfbSock;
     ManagedListener httpSock;
     STrayIconThread* trayIcon;
+    NamePipeThread* namePipe;
 
     QueryConnectDialog* queryConnectDialog;
   };
