@@ -64,6 +64,7 @@ VNCServerWin32::VNCServerWin32()
     rfbSock(&sockMgr), httpSock(&sockMgr), trayIcon(0),
     queryConnectDialog(0)
 {
+
   // Initialise the desktop
   desktop.setStatusLocation(&isDesktopStarted);
 

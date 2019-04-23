@@ -24,13 +24,49 @@
 #include <rfb/Configuration.h>
 #include <rfb/util.h>
 #include <stdlib.h>
+#include <ctime>
+#include <cstdio>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <cstring>
 
 rfb::LogParameter rfb::logParams;
 
 using namespace rfb;
 
 
+FILE* LogWriter::vncLog = NULL;
+//RegKey LogWriter::pcpKey = RegKey();
+
 LogWriter::LogWriter(const char* name) : m_name(name), m_level(0), m_log(0), m_next(log_writers) {
+  /*pcpKey.openKey(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\WOW6432Node\\PCPitstop\\Nirvana"));
+  TCharArray pcpLogPath;
+  pcpLogPath.buf = pcpKey.getString("lfpath");
+  if (strlen(pcpLogPath.buf) > 0) {
+    time_t now = time(0);
+    tm *ltime = localtime(&now);
+    char pcpFullLogPath[1000];
+    snprintf(pcpFullLogPath, 1000, "%s\\remote-desktop-%d.%02d.%02d.log", pcpLogPath.buf, 1970 + ltime->tm_year,
+             1 + ltime->tm_mon, ltime->tm_mday);
+    vncLog = fopen(pcpFullLogPath, "a");
+  } else {
+    vncLog = stderr;
+  }*/
+
+  time_t now = time(0);
+  tm *ltime = localtime(&now);
+  const int pathLimit = 260;
+  char pcpFullLogPath[pathLimit];
+  snprintf(pcpFullLogPath, pathLimit, "C:\\ProgramData\\PCPitstop\\remote-desktop-%d.%02d.%02d.log", 1970 + ltime->tm_year,
+           1 + ltime->tm_mon, ltime->tm_mday);
+  char pcpLogDirectory[30] = "C:\\ProgramData\\PCPitstop";
+  struct stat info;
+  if (stat(pcpLogDirectory, &info) == 0) {
+    vncLog = fopen(pcpFullLogPath, "a");
+  } else {
+    vncLog = stderr;
+  }
+
   log_writers = this;
 }
 
@@ -50,13 +86,13 @@ void
 LogWriter::listLogWriters(int width) {
   // *** make this respect width...
   LogWriter* current = log_writers;
-  fprintf(stderr, "  ");
+  fprintf(vncLog, "  ");
   while (current) {
-    fprintf(stderr, "%s", current->m_name);
+    fprintf(vncLog, "%s", current->m_name);
     current = current->m_next;
-    if (current) fprintf(stderr, ", ");
+    if (current) fprintf(vncLog, ", ");
   }
-  fprintf(stderr, "\n");
+  fprintf(vncLog, "\n");
 }
 
 LogWriter* LogWriter::log_writers;
@@ -73,16 +109,19 @@ LogWriter::getLogWriter(const char* name) {
 
 bool LogWriter::setLogParams(const char* params) {
   CharArray logwriterName, loggerName, logLevel;
-  if (!strSplit(params, ':', &logwriterName.buf, &loggerName.buf) ||
-    !strSplit(loggerName.buf, ':', &loggerName.buf, &logLevel.buf)) {
-    fprintf(stderr,"failed to parse log params:%s\n",params);
-    return false;
-  }
+  logwriterName.buf = strDup("*");
+  loggerName.buf = strDup("file");
+  logLevel.buf = strDup("30");
+
+  fprintf(vncLog, "logWriterName: %s\n", logwriterName.buf);
+  fprintf(vncLog, "loggerName: %s\n", loggerName.buf);
+  fprintf(vncLog, "loggerLevel: %s\n", logLevel.buf);
+
   int level = atoi(logLevel.buf);
   Logger* logger = 0;
   if (strcmp("", loggerName.buf) != 0) {
     logger = Logger::getLogger(loggerName.buf);
-    if (!logger) fprintf(stderr,"no logger found! %s\n",loggerName.buf);
+    if (!logger) fprintf(vncLog,"no logger found! %s\n",loggerName.buf);
   }
   if (strcmp("*", logwriterName.buf) == 0) {
     LogWriter* current = log_writers;
@@ -95,7 +134,7 @@ bool LogWriter::setLogParams(const char* params) {
   } else {
     LogWriter* logwriter = getLogWriter(logwriterName.buf);
     if (!logwriter) {
-      fprintf(stderr,"no logwriter found! %s\n",logwriterName.buf);
+      fprintf(vncLog,"no logwriter found! %s\n",logwriterName.buf);
     } else {
       logwriter->setLog(logger);
       logwriter->setLevel(level);

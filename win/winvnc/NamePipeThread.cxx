@@ -97,7 +97,8 @@ void winvnc::NamePipeThread::run() {
     SECURITY_ATTRIBUTES sa = {sizeof(sa), psd, FALSE};
 
     pipe = CreateNamedPipe(namePipeName, PIPE_ACCESS_INBOUND, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT, PIPE_UNLIMITED_INSTANCES,
-                           NULL, BUFFER_SIZE, 0, &sa);
+            // NULL, BUFFER_SIZE, 0, &sa);
+                          NULL, BUFFER_SIZE, 0, NULL);
 
     if (pipe == INVALID_HANDLE_VALUE) {
       vlog.debug("invalid handle value");

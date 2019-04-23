@@ -127,7 +127,7 @@ static void processParams(int argc, char **argv) {
 
           if (!hwnd) {
             // Send message to named pipe
-            TCHAR pipeName[] = TEXT("\\\\.\\pipe\\VNCNamedPipe");
+            TCHAR pipeName[] = _T("\\\\.\\pipe\\VNCNamedPipe");
             HANDLE pipe;
 
             int loop = 0;
@@ -322,8 +322,14 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prevInst, char *cmdLine, int cmdSho
     initFileLogger("C:\\temp\\WinVNC4.log");
     logParams.setParam("*:stderr:100");
 #else
-    initFileLogger("C:\\temp\\WinVNC4.log");
-  logParams.setParam("*:stderr:0");
+    time_t now = time(0);
+    tm *ltime = localtime(&now);
+    const int pathLimit = 260;
+    char pcpFullLogPath[pathLimit];
+    snprintf(pcpFullLogPath, pathLimit, "C:\\ProgramData\\PCPitstop\\remote-desktop-%d.%02d.%02d.log", 1970 + ltime->tm_year,
+             1 + ltime->tm_mon, ltime->tm_mday);
+    initFileLogger(pcpFullLogPath);
+    logParams.setParam("*:stderr:30");
 #endif
     rfb::win32::initEventLogLogger(VNCServerService::Name);
 

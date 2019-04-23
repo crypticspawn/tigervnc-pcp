@@ -19,13 +19,31 @@
 // -=- Logger_stdio.cxx - Logger instances for stderr and stdout
 
 #include <rfb/Logger_stdio.h>
+#include <sys/stat.h>
 
 using namespace rfb;
 
-static Logger_StdIO logStdErr("stderr", stderr);
-static Logger_StdIO logStdOut("stdout", stdout);
+static FILE* vncLog = 0;
 
 bool rfb::initStdIOLoggers() {
+  time_t now = time(0);
+  tm *ltime = localtime(&now);
+  const int pathLimit = 260;
+  char pcpFullLogPath[pathLimit];
+  snprintf(pcpFullLogPath, pathLimit, "C:\\ProgramData\\PCPitstop\\remote-desktop-%d.%02d.%02d.log", 1970 + ltime->tm_year,
+           1 + ltime->tm_mon, ltime->tm_mday);
+  char pcpLogDirectory[30] = "C:\\ProgramData\\PCPitstop";
+  struct stat info;
+  if (stat(pcpLogDirectory, &info) == 0) {
+    vncLog = fopen(pcpFullLogPath, "a");
+  } else {
+    vncLog = stderr;
+  }
+
+
+  static Logger_StdIO logStdErr("stderr", vncLog);
+  static Logger_StdIO logStdOut("stdout", vncLog);
+
   logStdErr.registerLogger();
   logStdOut.registerLogger();
   return true;

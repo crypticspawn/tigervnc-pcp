@@ -24,6 +24,7 @@
 #include <stdarg.h>
 #include <rfb/Logger.h>
 #include <rfb/Configuration.h>
+#include <rfb_win32/Registry.h>
 
 #ifdef __GNUC__
 #  define __printf_attr(a, b) __attribute__((__format__ (__printf__, a, b)))
@@ -47,6 +48,8 @@
       va_end(ap);                          \
     }                                      \
   }
+
+using namespace rfb::win32;
 
 namespace rfb {
 
@@ -93,6 +96,9 @@ namespace rfb {
     static LogWriter* getLogWriter(const char* name);
 
     static bool setLogParams(const char* params);
+
+    static FILE* vncLog;
+   // static RegKey pcpKey;
 
   private:
     const char* m_name;
