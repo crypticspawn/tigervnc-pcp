@@ -18,10 +18,10 @@ include(CheckCSourceRuns)
 include(CMakeMacroLibtoolFile)
 
 project(tigervnc)
-set(VERSION 1.6.0)
+set(VERSION 1.6.1)
 
 # The RC version must always be four comma-separated numbers
-set(RCVERSION 1,6,0,0)
+set(RCVERSION 1,6,1,0)
 
 # Installation paths
 set(BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")
@@ -40,7 +40,7 @@ if(MSVC)
 endif()
 
 if(NOT BUILD_TIMESTAMP)
-  set(BUILD_TIMESTAMP "2019-04-02 09:07")
+  set(BUILD_TIMESTAMP "2019-04-23 22:50")
 #  execute_process(COMMAND "date" "+%Y-%m-%d %H:%M" OUTPUT_VARIABLE BUILD_TIMESTAMP)
   string(REGEX REPLACE "\n" "" BUILD_TIMESTAMP ${BUILD_TIMESTAMP})
 endif()
