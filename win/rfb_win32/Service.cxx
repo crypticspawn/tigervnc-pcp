@@ -431,9 +431,9 @@ bool rfb::win32::registerService(const TCHAR* name, const TCHAR* desc,
 
 
     ServiceHandle service = CreateService(scm,
-      name, desc, SC_MANAGER_ALL_ACCESS,
+      name, name, SC_MANAGER_ALL_ACCESS,
       SERVICE_WIN32_OWN_PROCESS | SERVICE_INTERACTIVE_PROCESS,
-      SERVICE_AUTO_START, SERVICE_ERROR_IGNORE,
+      SERVICE_DEMAND_START, SERVICE_ERROR_IGNORE,
       cmdline.buf, NULL, NULL, NULL, NULL, NULL);
     if (!service)
       throw rdr::SystemException("unable to create service", GetLastError());
