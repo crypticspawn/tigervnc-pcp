@@ -24,7 +24,7 @@
 #include <stdarg.h>
 #include <rfb/Logger.h>
 #include <rfb/Configuration.h>
-#include <rfb_win32/Registry.h>
+//#include <rfb_win32/Registry.h>
 
 #ifdef __GNUC__
 #  define __printf_attr(a, b) __attribute__((__format__ (__printf__, a, b)))
@@ -49,7 +49,7 @@
     }                                      \
   }
 
-using namespace rfb::win32;
+//using namespace rfb::win32;
 
 namespace rfb {
 
