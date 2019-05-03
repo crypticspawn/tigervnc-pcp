@@ -65,7 +65,7 @@ DWORD winvnc::messageThread(LPVOID param) {
     thread->server.addNewClient(data);
     }
   }
-  
+
   FlushFileBuffers(pipe);
   DisconnectNamedPipe(pipe);
   CloseHandle(pipe);
