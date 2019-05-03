@@ -132,8 +132,8 @@ void VNCServerWin32::processAddressChange() {
 
 void VNCServerWin32::regConfigChanged() {
   // -=- Make sure we're listening on the right ports.
-  rfbSock.setServer(&vncServer);
-  rfbSock.setPort(port_number, localHost);
+  //rfbSock.setServer(&vncServer);
+  //rfbSock.setPort(port_number, localHost);
   //httpSock.setServer(&httpServer);
   //httpSock.setPort(http_port, localHost);
 
@@ -142,7 +142,7 @@ void VNCServerWin32::regConfigChanged() {
 
   // -=- Update the TCP address filter for both ports, if open.
   CharArray pattern(hosts.getData());
-  rfbSock.setFilter(pattern.buf);
+  //rfbSock.setFilter(pattern.buf);
   //httpSock.setFilter(pattern.buf);
 
   // -=- Update the tray icon tooltip text with IP addresses
