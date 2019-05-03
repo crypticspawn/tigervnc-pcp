@@ -25,19 +25,22 @@ DWORD winvnc::messageThread(LPVOID param) {
 
   if (param == NULL) {
     vlog.debug("pipe server failed");
+    if (request != NULL) HeapFree(heap, 0, request);
     return (DWORD) -1;
   }
 
   if (request == NULL) {
     vlog.debug("was unable to allocate heap.");
+    if (request != NULL) HeapFree(heap, 0, request);
     return (DWORD) -1;
   }
 
-  NamePipeThread* thread = (NamePipeThread*) param;
-  pipe = thread->getPipe();
+  //NamePipeThread* thread = (NamePipeThread*) param;
+  //pipe = thread->getPipe();
+  pipe = (HANDLE) param;
 
   while(1) {
-    success = ReadFile(pipe, request, BUFFER_SIZE, &bytesRead, NULL);
+    success = ReadFile(pipe, request, BUFFER_SIZE * sizeof(TCHAR), &bytesRead, NULL);
 
     if (!success || bytesRead == 0) {
       if (GetLastError() == ERROR_BROKEN_PIPE) {
@@ -47,22 +50,22 @@ DWORD winvnc::messageThread(LPVOID param) {
       }
       break;
     }
-  }
 
-  // Process the message
-  vlog.debug("Message Received: %s", request);
+    // Process the message
+    vlog.debug("Message Received: %s", request);
 
-  char* command;
-  char* data;
-  strSplit(request,'|', &command, &data);
+    char* command;
+    char* data;
+    strSplit(request,'|', &command, &data);
 
-  vlog.debug("Command: %s", command);
-  vlog.debug("Data: %s", data);
+    vlog.debug("Command: %s", command);
+    vlog.debug("Data: %s", data);
 
-  if (strncasecmp(command, "AddClient", 9) == 0) {
+    if (strncasecmp(command, "AddClient", 9) == 0) {
     thread->server.addNewClient(data);
+    }
   }
-
+  
   FlushFileBuffers(pipe);
   DisconnectNamedPipe(pipe);
   CloseHandle(pipe);
@@ -110,7 +113,7 @@ void winvnc::NamePipeThread::run() {
     if (fConnected) {
       vlog.debug("We are now connected.");
 
-      workerThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) messageThread, this, 0, &workerThreadId);
+      workerThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) messageThread, pipe, 0, &workerThreadId);
 
       if (workerThreadId == NULL) {
         vlog.debug("Was unable to create a worker thread: %ld", GetLastError());
