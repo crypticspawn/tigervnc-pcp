@@ -12,7 +12,6 @@
 #include <cstdio>
 
 #define BUFFER_SIZE 600
-//#define BUFFER_SIZE (600 * sizeof(TCHAR))
 
 namespace winvnc {
   class NamePipeThread : rfb::Thread {

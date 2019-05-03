@@ -35,9 +35,8 @@ DWORD winvnc::messageThread(LPVOID param) {
     return (DWORD) -1;
   }
 
-  //NamePipeThread* thread = (NamePipeThread*) param;
-  //pipe = thread->getPipe();
-  pipe = (HANDLE) param;
+  NamePipeThread* thread = (NamePipeThread*) param;
+  pipe = (HANDLE) thread->getPipe();
 
   while(1) {
     success = ReadFile(pipe, request, BUFFER_SIZE * sizeof(TCHAR), &bytesRead, NULL);
@@ -62,7 +61,7 @@ DWORD winvnc::messageThread(LPVOID param) {
     vlog.debug("Data: %s", data);
 
     if (strncasecmp(command, "AddClient", 9) == 0) {
-    thread->server.addNewClient(data);
+       thread->server.addNewClient(data);
     }
   }
 
@@ -113,7 +112,7 @@ void winvnc::NamePipeThread::run() {
     if (fConnected) {
       vlog.debug("We are now connected.");
 
-      workerThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) messageThread, pipe, 0, &workerThreadId);
+      workerThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) messageThread, this, 0, &workerThreadId);
 
       if (workerThreadId == NULL) {
         vlog.debug("Was unable to create a worker thread: %ld", GetLastError());
