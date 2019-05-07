@@ -82,6 +82,7 @@ HANDLE winvnc::NamePipeThread::getPipe() {
 int winvnc::NamePipeThread::primePipe() {
     TCHAR pipeName[] = _T("\\\\.\\pipe\\VNCNamedPipe");
     HANDLE pipe;
+    BOOL success = FALSE;
 
     int loop = 0;
     while(1) {
