@@ -20,6 +20,7 @@ namespace winvnc {
   public:
     VNCServerWin32& server;
     NamePipeThread(VNCServerWin32& server);
+    int primePipe();
     HANDLE getPipe();
     void run();
 

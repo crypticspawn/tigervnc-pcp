@@ -253,7 +253,7 @@ static void init_fltk()
   fl_message_hotspot(false);
 
   // Avoid empty titles for popups
-  fl_message_title_default(_("TigerVNC Viewer"));
+  fl_message_title_default(_("VNC Viewer"));
 
 #ifdef WIN32
   // Most "normal" Windows apps use this font for UI elements.

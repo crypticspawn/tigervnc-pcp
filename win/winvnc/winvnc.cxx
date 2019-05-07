@@ -134,13 +134,14 @@ static void processParams(int argc, char **argv) {
             while(1) {
               pipe = CreateFile(pipeName, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
 
-              if (pipe != INVALID_HANDLE_VALUE) {
-                break;
-              }
 
               if (GetLastError() == ERROR_FILE_NOT_FOUND && loop++ < 10) { // This might mean the pipe hasn't been created yet
                 Sleep(200);
                 continue;
+              }
+
+              if (pipe != INVALID_HANDLE_VALUE) {
+                break;
               }
 
               if (GetLastError() != ERROR_PIPE_BUSY) {

@@ -79,9 +79,68 @@ HANDLE winvnc::NamePipeThread::getPipe() {
   return this->pipe;
 }
 
+int winvnc::NamePipeThread::primePipe() {
+    TCHAR pipeName[] = _T("\\\\.\\pipe\\VNCNamedPipe");
+    HANDLE pipe;
+
+    int loop = 0;
+    while(1) {
+      pipe = CreateFile(pipeName, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+
+
+      if (GetLastError() == ERROR_FILE_NOT_FOUND && loop++ < 10) { // This might mean the pipe hasn't been created yet
+        Sleep(200);
+        continue;
+      }
+
+      if (pipe != INVALID_HANDLE_VALUE) {
+        break;
+      }
+
+      if (GetLastError() != ERROR_PIPE_BUSY) {
+        vlog.debug("Could not open pipe: %ld", GetLastError());
+        return 1;
+        //throw rdr::Exception("Could not open pipe: %ld", GetLastError());
+      }
+
+      if (!WaitNamedPipe(pipeName, 20000)) {
+        vlog.debug("Could not open pipe: 20 second wait timed out.");
+        return 2;
+        //throw rdr::Exception("Could not open pipe: 20 second wait timed out.");
+      }
+    }
+
+    DWORD mode = PIPE_READMODE_MESSAGE;
+    success = SetNamedPipeHandleState(pipe, &mode, NULL, NULL);
+
+    if (!success) {
+      vlog.debug("SetNamedPipeHandleState failed: %ld", GetLastError());
+      return 3;
+      //throw rdr::Exception("SetNamedPipeHandleState failed.");
+    }
+
+    static TCHAR destination[600];
+    sprintf(destination, "PrimePipe|initialMessage");
+    DWORD charactersToWrite = (strlen(destination))*sizeof(TCHAR);  //TODO:  Look into why the client string looks truncated
+    DWORD charactersWritten = 0;
+
+    vlog.debug("Sending %ld byte message: \"%s\"", charactersToWrite, destination);
+
+    success = WriteFile(pipe, destination, charactersToWrite, &charactersWritten, NULL);
+
+    if (!success) {
+      vlog.debug("WriteFile to pipe failed: %ld", GetLastError());
+      return 4;
+      //throw rdr::Exception("WriteFile to pipe failed.");
+    }
+
+    vlog.debug("Message was sent to pipe");
+    return 0;
+}
 
 void winvnc::NamePipeThread::run() {
   // Name Pipe Code goes here
+  BOOL primedPipe = FALSE;
   BOOL fConnected = FALSE;
   HANDLE workerThread = NULL;
   pipe = INVALID_HANDLE_VALUE;
@@ -110,7 +169,14 @@ void winvnc::NamePipeThread::run() {
     fConnected = ConnectNamedPipe(pipe, NULL) ? TRUE : (GetLastError() == ERROR_PIPE_CONNECTED);
 
     if (fConnected) {
+
       vlog.debug("We are now connected.");
+
+      // Prime the namepipe
+      if (!primedPipe) {
+        primePipe();
+        primedPipe = TRUE;
+      }
 
       workerThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) messageThread, this, 0, &workerThreadId);
 
